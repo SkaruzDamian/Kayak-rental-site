@@ -1,0 +1,179 @@
+   /* Domyślne style dla strony */
+   body {
+    margin: 0;
+    padding: 0;
+    background-color: rgba(211, 225, 225);
+}
+
+/* Styl dla nagłówka */
+header {
+    background-image: url('images/zdj.jpg'); /* Ścieżka do pliku zdj.jpg */
+    background-size: 100% 100%; /* Rozciągnij obraz na cały nagłówek */
+    height: 100vh; /* Wysokość nagłówka równa wysokości okna przeglądarki */
+    margin: 0;
+    padding: 0;
+}
+
+/* Styl dla nawigacji */
+nav {
+    background-color: rgba(0, 0, 0, 0.5); /* Tło nawigacji z przezroczystością */
+    padding: 10px 0; /* Wewnętrzny odstęp od góry i dołu */
+}
+
+/* Styl dla listy nawigacyjnej */
+ul {
+    list-style-type: none; /* Usunięcie kropek przed elementami listy */
+    margin: 0;
+    padding: 0;
+    text-align: center; /* Wyśrodkowanie tekstu */
+}
+
+/* Styl dla elementów listy nawigacyjnej */
+li {
+    display: inline; /* Wyświetlenie elementów obok siebie */
+    margin: 0 20px; /* Odstęp między elementami */
+}
+
+/* Styl dla linków nawigacyjnych */
+a {
+    text-decoration: none; /* Usunięcie podkreślenia linków */
+    color: white; /* Kolor tekstu */
+    font-weight: bold; /* Pogrubienie tekstu */
+    font-size: 18px; /* Rozmiar tekstu */
+}
+
+/* Styl dla elementu h1 */
+h1 {
+    text-align: center; /* Wyśrodkowanie tekstu h1 */
+    margin-top: 50px; /* Dodatkowy odstęp od góry */
+    font-size: 36px; /* Rozmiar tekstu */
+   /* Pogrubienie tekstu */
+    font-family: 'Mitr', sans-serif; /* Dziedziczenie czcionki od rodzica (czyli od elementów <a>) */
+}
+
+p {
+    margin: 5vh;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 20px;
+    text-align: center;
+}
+
+.obrazek {
+    height: 40vh;
+    width: 40vh;
+    margin-right: 20px;
+}
+
+.obraz {
+    height: 40vh;
+    width: 40vh;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+
+.opinia-container {
+background-color: rgb(173,216,230);
+color: white;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+margin: 20px auto;
+max-width: 500px;
+text-align: center; /* Wyśrodkowanie tekstu */
+opacity: 0;
+transition: opacity 0.5s ease-in-out; /* Dodaj efekt przejścia */
+}
+
+.opinia-container.active {
+opacity: 1;
+}
+
+/* Dodaj klucz animacji */
+@keyframes opiniaFade {
+from {
+opacity: 0;
+}
+to {
+opacity: 1;
+}
+}
+
+/* Dodaj animację dla .opinia-container */
+.opinia-container {
+animation: opiniaFade 0.5s ease-in-out;
+}
+
+
+.opinia h3 {
+font-size: 24px; /* Większa czcionka dla autorów opinii */
+margin-bottom: 10px; /* Mniejszy odstęp od treści opinii */
+font-family: Arial, sans-serif; /* Inna czcionka dla autorów opinii */
+}
+
+.opinia p {
+margin: 10px 0; /* Mniejszy odstęp od góry i dołu */
+font-family: Arial, sans-serif; /* Inna czcionka dla treści opinii */
+font-size: 18px; /* Mniejsza czcionka dla treści opinii */
+}
+
+
+.paski-opinii {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pasek {
+    width: 20px;
+    height: 20px;
+    background-color: gray;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.aktywny {
+    background-color: black; /* Kolor aktywnego paska */
+}
+/* Styl dla footeru */
+footer {
+background-color: #333; /* Kolor tła stopki */
+color: white; /* Kolor tekstu */
+padding: 20px 0; /* Wewnętrzny odstęp od góry i dołu */
+text-align: center; /* Wyśrodkowanie zawartości */
+position: relative;
+}
+
+/* Styl dla kontenera w stopce */
+.footer-container {
+display: flex;
+justify-content: space-between;
+align-items: center;
+
+margin: 0 auto;
+}
+
+/* Styl dla loga UE */
+.logo-ue img{
+height: auto; /* Dostosuj wysokość logo UE do swoich potrzeb */
+
+}
+
+/* Styl dla sekcji kontaktu */
+.contact p {
+margin-left: 300px;
+font-size: 16px;
+}
+
+.contact a {
+color: white;
+text-decoration: none;
+/* Odstęp między numerem telefonu a logo FB */
+}
+
+/* Styl dla logo Facebook */
+
+
+/* Styl dla informacji o twórcy strony */
+.created-by p {
+font-size: 14px;
+}
