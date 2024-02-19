@@ -1,21 +1,25 @@
-<?php
-
+<?php 
 include "config.php";
 
-// Fetch all records
-$sql = "SELECT * FROM events";
-$eventsList = mysqli_query($con,$sql);
+$sql = "SELECT * FROM rez";
+$eventsList = mysqli_query($con, $sql);
 
 $response = array();
+$addedEvents = array(); 
+
 while($row = mysqli_fetch_assoc($eventsList)){
-    $response[] = array(
-        "eventid" => $row['id'],
-        "title" => $row['title'],
-        "description" => $row['description'],
-        "start" => $row['start_date'],
-        "end" => $row['end_date'],
-    );
+    $eventId = $row['id'];
+    if (!in_array($eventId, $addedEvents)) {
+        $addedEvents[] = $eventId;
+        $description = 'Jedynki: ' . (20 - $row['ilosc_kajakow_jednoosobowych']) . ', Dwójki: ' . (20 - $row['ilosc_kajakow_dwuosobowych']);
+        $response[] = array(
+            "eventid" => $eventId,
+            "description" => $description,
+            "start" => $row['data_wypozyczenia'],
+        );
+    }
 }
 
 echo json_encode($response);
 exit;
+?>

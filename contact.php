@@ -13,22 +13,22 @@
 
     <title>Kajaki u Daniela</title>
     <style>
-        /* Styl dla sekcji kontaktu */
+    
 .contact {
     display: flex;
     justify-content: space-between;
     padding: 20px;
-    background-color: rgba(255, 255, 255, 0.9); /* Tło formularza z przezroczystością */
+    background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Cień formularza */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
  
 }
 
-/* Styl dla formularza kontaktowego */
+
 .contact-form {
-    flex: 1; /* Formularz zajmuje dostępną przestrzeń po prawej stronie */
+    flex: 1; 
     padding: 20px;
-    border-left: 1px solid #ddd; /* Linia oddzielająca formularz od informacji kontaktowych */
+    border-left: 1px solid #ddd; 
 }
 
 .contact h2 {
@@ -36,7 +36,7 @@
     margin-bottom: 20px;
 }
 
-/* Styl dla etykiet i pól formularza */
+
 .contact label {
     display: block;
     font-size: 16px;
@@ -55,10 +55,10 @@
 }
 
 .contact textarea {
-    height: 150px; /* Wysokość pola tekstowego */
+    height: 150px;
 }
 
-/* Styl dla przycisku "Wyślij" */
+
 .contact button[type="submit"] {
     background-color: #007BFF;
     color: white;
@@ -70,7 +70,7 @@
 }
 
 .contact button[type="submit"]:hover {
-    background-color: #0056b3; /* Efekt przy najechaniu myszką */
+    background-color: #0056b3; 
 }
 
         </style>

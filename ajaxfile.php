@@ -1,185 +1,109 @@
-<?php
+<?php 
 
 include "config.php";
-
+	
 $request = "";
 
-// Read $_GET value
+
+// Read the value of $_POST
 if(isset($_POST['request'])){
-     $request = $_POST['request'];
+	$request = $_POST['request'];
 }
 
-// Add New event 
+// Add a new booking
 if($request == 'addEvent'){
 
-     // POST data
-     $title = ""; $description = ""; 
-     $start_date = ""; $end_date = "";
+	$fullname = ""; 
+	$phonenumber = ""; 
+	$singlekayaks = ""; 
+	$doublekayaks = ""; 
+	$time = ""; 
+	$start_date = ""; 
+	$end_date = "";
+	$notes="";
+	if(isset($_POST['fullname'])){
+		$fullname = $_POST['fullname'];
+	}
+	if(isset($_POST['phonenumber'])){
+		$phonenumber = $_POST['phonenumber'];
+	}
+	if(isset($_POST['singlekayaks'])){
+		$singlekayaks = $_POST['singlekayaks'];
+	}
+	if(isset($_POST['doublekayaks'])){
+		$doublekayaks = $_POST['doublekayaks'];
+	}
+	if(isset($_POST['time'])){
+		$time = $_POST['time'];
+	}
+	if(isset($_POST['start_date'])){
+		$start_date = $_POST['start_date'];
+	}
+	if(isset($_POST['end_date'])){
+		$end_date = $_POST['end_date'];
+	}
+	if(isset($_POST['notes'])){
+		$notes = $_POST['notes'];
+	}
+	$response = array();
+	$status = 0;
+// Check if the start date is later than today's date
+	if(strtotime($start_date) < strtotime(date('Y-m-d'))) {
+        $response['status'] = 0;
+        $response['message'] = 'Data rozpoczęcia nie może być wcześniejsza niż dzisiejsza data';
+        echo json_encode($response);
+        exit;
+    }
+	// Check if the customer exists in the customer table
+    $sql_check_client = "SELECT id FROM kli WHERE CONCAT(imie, ' ', nazwisko) = '$fullname' AND telefon = '$phonenumber'";
+    $result_check_client = mysqli_query($con, $sql_check_client);
+    $client_row = mysqli_fetch_assoc($result_check_client);
 
-     if(isset($_POST['title'])){
-          $title = $_POST['title'];
-     }
-     if(isset($_POST['description'])){
-          $description = $_POST['description'];
-     }
-     if(isset($_POST['start_date'])){
-          $start_date = $_POST['start_date'];
-     }
-     if(isset($_POST['start_date'])){
-          $end_date = $_POST['end_date'];
-     }
+    // If the customer doesn't exist, add a new customer to the klajenci table
+    if (!$client_row) {
+		// Split the fullname field into first and last name
+		$name_parts = explode(" ", $fullname);
+		$firstname = $name_parts[0];
+		$lastname = isset($name_parts[1]) ? $name_parts[1] : ''; 
+	
+		// Insert record to the customer table
+		$sql_insert_client = "INSERT INTO kli (imie, nazwisko, telefon) VALUES ('$firstname', '$lastname', '$phonenumber')";
+		mysqli_query($con, $sql_insert_client);
+	}
+	
 
-     $response = array();
-     $status = 0;
-     if(!empty($title) && !empty($description) && !empty($start_date) && !empty($end_date) ){
+   // Check if there are enough kayaks available
+    $sql_check_availability = "SELECT SUM(ilosc_kajakow_dwuosobowych) as total_double, SUM(ilosc_kajakow_jednoosobowych) as total_single
+                               FROM rez
+                               WHERE data_wypozyczenia = '$start_date'";
+    $result_check_availability = mysqli_query($con, $sql_check_availability);
+    $row_check_availability = mysqli_fetch_assoc($result_check_availability);
+    $total_double = $row_check_availability['total_double'];
+    $total_single = $row_check_availability['total_single'];
 
-          // Insert record
-          $sql = "INSERT INTO events(title,description,start_date,end_date) VALUES('".$title."','".$description."','".$start_date."','".$end_date."')";
-          if(mysqli_query($con,$sql)){
-               $eventid = mysqli_insert_id($con);
+    if(($total_double + $doublekayaks) > 20 || ($total_single + $singlekayaks) > 20) {
+        $response['status'] = 0;
+        $response['message'] = 'Nie ma wystarczającej liczby dostępnych kajaków na tę datę';
+        echo json_encode($response);
+        exit;
+    }
 
-               $status = 1;
+	$sql_insert_reservation = "INSERT INTO rez (klient_id, data_wypozyczenia, ilosc_kajakow_dwuosobowych, ilosc_kajakow_jednoosobowych, uwagi)
+	VALUES ((SELECT id FROM kli WHERE CONCAT(imie, ' ', nazwisko) = '$fullname'), '$start_date', $doublekayaks, $singlekayaks, '$notes')";
 
-               $response['eventid'] = $eventid;
-               $response['status'] = 1;
-               $response['message'] = 'Event created successfully.';
-          }
-     }
+    if(mysqli_query($con, $sql_insert_reservation)){
+        $status = 1;
 
-     if($status == 0){
-          $response['status'] = 0;
-          $response['message'] = 'Event not created.';
-     }
+        $total_price = ($doublekayaks * 110) + ($singlekayaks * 70);
+        $response['status'] = 1;
+        $response['message'] = 'Udana rezerwacja, cena całkowita: ' . $total_price;
 
-     echo json_encode($response);
-     exit;
+    } else {
+        $response['status'] = 0;
+        $response['message'] = 'Nieudana rezerwacja';
+    }
+    echo json_encode($response);
+    exit;
 }
 
-// Move event
-if($request == 'moveEvent'){
-
-     // POST data
-     $eventid = 0; 
-     $start_date = ""; $end_date = "";
-
-     if(isset($_POST['eventid']) && is_numeric($_POST['eventid'])){
-          $eventid = $_POST['eventid'];
-     }
-     if(isset($_POST['start_date'])){
-          $start_date = $_POST['start_date'];
-     }
-     if(isset($_POST['end_date'])){
-          $end_date = $_POST['end_date'];
-     }
-
-     $response = array();
-     $status = 0;
-
-     // Check event id
-     $sql = "SELECT id FROM events WHERE id=".$eventid;
-     $result = mysqli_query($con,$sql);
-     if(mysqli_num_rows($result)){
-         // Update record
-         $sql = "UPDATE events SET start_date='".$start_date."',end_date='".$end_date."' WHERE id=".$eventid;
-         if(mysqli_query($con,$sql)){
-              $status = 1;
-
-              $response['status'] = 1;
-              $response['message'] = 'Event date updated successfully.';
-         }
-     }
-
-     if($status == 0){
-          $response['status'] = 0;
-          $response['message'] = 'Event date not updated.';
-     }
-
-     echo json_encode($response);
-     exit;
-}
-
-// Update event
-if($request == 'editEvent'){
-
-     // POST data
-     $eventid = 0;
-     if(isset($_POST['eventid']) && is_numeric($_POST['eventid'])){
-          $eventid = $_POST['eventid'];
-     }
-     if(isset($_POST['title'])){
-          $title = $_POST['title'];
-     }
-     if(isset($_POST['description'])){
-          $description = $_POST['description'];
-     }
-
-     $response = array();
-
-     if($eventid > 0 && !empty($title) && !empty($description) ){
-
-          // Check event id
-          $sql = "SELECT id FROM events WHERE id=".$eventid;
-          $result = mysqli_query($con,$sql);
-          if(mysqli_num_rows($result)){
-
-               // Update record
-               $sql = "UPDATE events SET title='".$title."', description='".$description."' WHERE id=".$eventid;
-               if(mysqli_query($con,$sql)){
-
-                    $status = 1;
-
-                    $response['status'] = 1;
-                    $response['message'] = 'Event updated successfully.';
-               }
-          }
-
-     }
-
-     if($status == 0){
-          $response['status'] = 0;
-          $response['message'] = 'Event not updated.';
-     }
-
-     echo json_encode($response);
-     exit;
-}
-
-// Delete Event
-if($request == 'deleteEvent'){
-
-     // POST data
-     $eventid = 0;
-     if(isset($_POST['eventid']) && is_numeric($_POST['eventid'])){
-          $eventid = $_POST['eventid'];
-     }
-
-     $response = array();
-     $status = 0;
-
-     if($eventid > 0){
-
-          // Check event id
-          $sql = "SELECT id FROM events WHERE id=".$eventid;
-          $result = mysqli_query($con,$sql);
-          if(mysqli_num_rows($result)){
-
-               // Delete record
-               $sql = "DELETE FROM events WHERE id=".$eventid;
-               if(mysqli_query($con,$sql)){
-                     $status = 1;
-
-                     $response['status'] = 1;
-                     $response['message'] = 'Event deleted successfully.';
-               }
-          }
-
-     }
-
-     if($status == 0){
-          $response['status'] = 0;
-          $response['message'] = 'Event not deleted.';
-     }
-
-     echo json_encode($response);
-     exit;
-}
+?>
