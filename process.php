@@ -1,8 +1,7 @@
 <?php
-// Połączenie z bazą danych
 $servername = "localhost";
-$username = "username"; // Zmień na swoją nazwę użytkownika
-$password = "password"; // Zmień na swoje hasło
+$username = "root"; 
+$password = ""; 
 $dbname = "Kayliw";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -18,13 +17,9 @@ $email = $_POST['email'];
 $message = $_POST['message'];
 
 // Wstaw dane do bazy danych
-$sql = "INSERT INTO Wiadomość (imie, temat, email, wiadomosc) VALUES ('$name', '$subject', '$email', '$message')";
+$sql = "INSERT INTO wiadomosci (imie, temat, email, wiadomosc) VALUES ('$name', '$subject', '$email', '$message')";
 
-if ($conn->query($sql) === TRUE) {
-    echo "Wiadomość została wysłana poprawnie.";
-} else {
-    echo "Błąd podczas wysyłania wiadomości: " . $conn->error;
-}
+
 
 $conn->close();
 ?>

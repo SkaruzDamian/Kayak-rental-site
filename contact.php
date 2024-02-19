@@ -86,7 +86,7 @@
             +48 123 456 789
             <br>
             <br>
-            <a style="color:blue;" href="https://www.facebook.com/TwojaStronaFacebook"><i class="fa fa-facebook"></i> Facebook Page</a>
+            <a style="color:blue;" href="https://www.facebook.com/KajakiLiw/"><i class="fa fa-facebook"></i> Facebook Page</a>
            <br>
            <br>
             <a style="color:green;" href="https://www.google.pl/maps/place/KAYLIW+Kajaki+i+Pychówki+Liwiec+Patrycja+Majewska/@52.37397,21.9710136,18.46z/data=!4m6!3m5!1s0x471f159faf990023:0x426264dc76a99b01!8m2!3d52.3741807!4d21.9696988!16s%2Fg%2F11q1m97pdc?entry=ttu"><i class="fa fa-map-marker"></i> Nasza lokalizacja</a>
