@@ -88,8 +88,8 @@ if($request == 'addEvent'){
         exit;
     }
 
-	$sql_insert_reservation = "INSERT INTO rez (klient_id, data_wypozyczenia, ilosc_kajakow_dwuosobowych, ilosc_kajakow_jednoosobowych, uwagi)
-	VALUES ((SELECT id FROM kli WHERE CONCAT(imie, ' ', nazwisko) = '$fullname'), '$start_date', $doublekayaks, $singlekayaks, '$notes')";
+	$sql_insert_reservation = "INSERT INTO rez (klient_id, data_wypozyczenia, godzina_rezerwacji, ilosc_kajakow_dwuosobowych, ilosc_kajakow_jednoosobowych, uwagi)
+	VALUES ((SELECT id FROM kli WHERE CONCAT(imie, ' ', nazwisko) = '$fullname'), '$start_date', '$time', $doublekayaks, $singlekayaks, '$notes')";
 
     if(mysqli_query($con, $sql_insert_reservation)){
         $status = 1;
