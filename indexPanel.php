@@ -18,6 +18,7 @@
         <a href="delete.php">Usuń rezerwacje</a>
         <a href="edit.php">Edytuj rezerwacje</a>
         <a href="logout.php">Wyloguj</a>
+        <a href="addReservation.php">Dodaj rezerwację</a>
     </nav>
 </header>
 <div class="container">
